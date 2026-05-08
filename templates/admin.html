@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Admin - CampusHub{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h3 class="fw-bold mb-4">Admin Dashboard</h3>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="stat-card"><div class="stat-num">{{ stats.users }}</div><div>Students</div></div></div>
+    <div class="col-md-4"><div class="stat-card"><div class="stat-num">{{ stats.events }}</div><div>Events</div></div></div>
+    <div class="col-md-4"><div class="stat-card"><div class="stat-num">{{ stats.registrations }}</div><div>Registrations</div></div></div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5">
+      <div class="auth-card p-4">
+        <h5 class="fw-bold mb-3">Post New Event</h5>
+        <form method="post" action="{{ url_for('admin_new_event') }}">
+          <div class="mb-2"><input name="title" class="form-control" placeholder="Title" required></div>
+          <div class="mb-2"><textarea name="description" class="form-control" placeholder="Description" rows="3" required></textarea></div>
+          <div class="row g-2 mb-2">
+            <div class="col"><input name="category" class="form-control" placeholder="Category" required></div>
+            <div class="col"><input name="venue" class="form-control" placeholder="Venue" required></div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col"><input name="date" type="datetime-local" class="form-control" required></div>
+            <div class="col"><input name="organizer" class="form-control" placeholder="Organizer" required></div>
+          </div>
+          <button class="btn btn-gradient w-100">Publish & Notify Students</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div class="auth-card p-4">
+        <h5 class="fw-bold mb-3">All Events</h5>
+        <div class="table-responsive">
+          <table class="table table-sm align-middle">
+            <thead><tr><th>Title</th><th>Date</th><th>Regs</th><th></th></tr></thead>
+            <tbody>
+              {% for e in events %}
+                <tr>
+                  <td><strong>{{ e.title }}</strong><div class="small text-muted">{{ e.category }} - {{ e.venue }}</div></td>
+                  <td class="small">{{ e.date }}</td>
+                  <td><span class="badge bg-primary">{{ e.reg_count }}</span></td>
+                  <td>
+                    <form method="post" action="{{ url_for('admin_delete_event', event_id=e.id) }}" onsubmit="return confirm('Delete event?')">
+                      <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} - CampusHub{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <a href="{{ url_for('dashboard') }}" class="text-muted small">&larr; Back to dashboard</a>
+  <div class="auth-card p-4 p-md-5 mt-3">
+    <span class="event-cat">{{ event.category }}</span>
+    <h2 class="fw-bold mt-2">{{ event.title }}</h2>
+    <p class="text-muted">{{ event.description }}</p>
+    <div class="row g-3 small">
+      <div class="col-md-4"><strong>Venue:</strong> {{ event.venue }}</div>
+      <div class="col-md-4"><strong>Date:</strong> {{ event.date }}</div>
+      <div class="col-md-4"><strong>Organizer:</strong> {{ event.organizer }}</div>
+    </div>
+    <hr>
+    {% if registered %}
+      <button class="btn btn-success" disabled>Registered</button>
+    {% else %}
+      <form method="post" action="{{ url_for('register_event', event_id=event.id) }}">
+        <button class="btn btn-gradient btn-lg">Register Now</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

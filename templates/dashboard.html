@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - CampusHub{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0">Events</h3>
+      </div>
+      <form class="row g-2 mb-4" method="get">
+        <div class="col-md-7">
+          <input name="q" value="{{ q }}" class="form-control" placeholder="Search events...">
+        </div>
+        <div class="col-md-3">
+          <select name="category" class="form-select">
+            <option value="">All categories</option>
+            {% for c in categories %}
+              <option value="{{ c }}" {% if c==cat %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2"><button class="btn btn-gradient w-100">Filter</button></div>
+      </form>
+
+      <div class="row g-3">
+        {% for e in events %}
+          <div class="col-md-6">
+            <div class="event-card h-100">
+              <div class="d-flex justify-content-between">
+                <span class="event-cat">{{ e.category }}</span>
+                {% if e.id in my_regs %}<span class="badge bg-success">Registered</span>{% endif %}
+              </div>
+              <h5 class="mt-2">{{ e.title }}</h5>
+              <p class="text-muted small mb-2">{{ e.description[:100] }}...</p>
+              <div class="small text-muted">Venue: {{ e.venue }}</div>
+              <div class="small text-muted mb-3">Date: {{ e.date }}</div>
+              <a href="{{ url_for('event_detail', event_id=e.id) }}" class="btn btn-sm btn-gradient">View & Register</a>
+            </div>
+          </div>
+        {% else %}
+          <p class="text-muted">No events match your filters.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="auth-card p-4">
+        <h5 class="fw-bold mb-3">Notifications</h5>
+        {% for n in notifications %}
+          <div class="notif-item">
+            <div class="small">{{ n.message }}</div>
+            <div class="text-muted x-small">{{ n.created_at[:16].replace('T',' ') }}</div>
+          </div>
+        {% else %}
+          <p class="text-muted small mb-0">No notifications yet. Register for events to receive reminders.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
